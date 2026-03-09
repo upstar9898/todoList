@@ -26,7 +26,22 @@ $(document).ready(function () {
     $("#importanceRange").change(function () {
         $("#importanceValue").html($("#importanceRange").val());
     });
+
+    // 할 일 추가 버튼 클릭
+    $("#addTodoBtn").click(function () {
+        addTodo();
+    });
+    // 엔터 키 입력으로 할 일 추가
+    $("#todoText").keydown(function (e) {
+        if (e.keyCode == 13) {
+            addTodo();
+        }
+    });
 });
+
+function addTodo() {
+    alert("!");
+}
 
 function loadTodos() {}
 
