@@ -1,0 +1,28 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.todo-card {
+    border-radius: 16px;
+}
+
+.range-value {
+    display: inline-block;
+    min-width: 24px;
+    text-align: center;
+    font-weight: bold;
+    color: #0d63fd;
+}
+
+.completed-text {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+.todo-item {
+    transition: all 0.2s ease;
+}
+
+.badge-box span {
+    margin-right: 6px;
+}
