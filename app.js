@@ -73,6 +73,13 @@ function addTodo() {
 
     // 화면에 출력
     renderTodos();
+
+    // 입력값들 초기화
+    $("#todoText").val("");
+    $("#priorityRange").val(3);
+    $("#importanceRange").val(3);
+    $("#priorityValue").text(3);
+    $("#importanceValue").text(3);
 }
 
 function saveTodos() {
@@ -160,7 +167,7 @@ function renderTodos(webTodoList) {
         const html = `
       <li class="list-group-item todo-item d-flex justify-content-between align-items-start">
         <div class="flex-grow-1 me-3">
-          <div class="fw-bold ${textClass}">${todo.text}</div>
+          <div class="fw-bold ${textClass}">${escapeHtml(todo.text)}</div>
           <div class="badge-box mt-2">
             <span class="badge bg-primary">우선순위: ${todo.priority}</span>
             <span class="badge bg-danger">중요도: ${todo.importance}</span>
@@ -181,4 +188,14 @@ function renderTodos(webTodoList) {
     `;
         todoListTag.append(html); // 할 일을 출력
     });
+}
+
+// XSS 방지
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
