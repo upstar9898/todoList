@@ -39,10 +39,146 @@ $(document).ready(function () {
     });
 });
 
+// 할 일 추가
 function addTodo() {
-    alert("!");
+    const text = $("#todoText").val().trim(); // 문자열은 주소값 저장, 주소값은 고정
+    const priority = Number($("#priorityValue").text());
+    const importance = Number($("#importanceValue").text());
+
+    if (text === "") {
+        // 공백 입력 방지
+        alert("할 일 내용을 입력하세요!");
+        $("#todoText").focus();
+        return;
+    }
+
+    const newTodo = {
+        id: Date.now(), // 할 일 고유번호(시간 : Date.now())
+        text: text, // 할 일 내용
+        priority: priority, // 우선순위
+        importance: importance, // 중요도
+        completed: false, // 완료여부
+        createdAt: Date.now(), // 등록시간
+    };
+
+    // 할 일을 배열에 추가
+    todoList.push(newTodo);
+    console.log(todoList);
+
+    // 정렬 (우선순위 + 중요도)
+    sortTodos();
+
+    // localStorage에 저장
+    saveTodos();
+
+    // 화면에 출력
+    renderTodos();
+}
+
+function saveTodos() {
+    // todoList 배열을 localStorage에 저장
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList));
+}
+
+function sortTodos() {
+    todoList.sort(function (a, b) {
+        // 정렬 기준이 되는 함수
+        const totalA = a.priority + a.importance;
+        const totalB = b.priority + b.importance;
+        if (totalB != totalA) {
+            return totalB - totalA;
+        }
+
+        if (b.priority !== a.priority) {
+            return b.priority - a.priority;
+        }
+
+        return a.createdAt - b.createdAt;
+    });
+    //     todoList.sort(function (a, b) {
+    //     const totalA = a.priority + a.importance;
+    //     const totalB = b.priority + b.importance;
+
+    //     // 1. 총점이 높은 항목이 앞에 온다.
+    //     if (totalA > totalB) {
+    //       return -1;
+    //     } else if (totalA < totalB) {
+    //       return 1;
+    //     }
+
+    //     // 2. 총점이 같으면 우선순위가 높은 항목이 앞에 온다.
+    //     if (a.priority > b.priority) {
+    //       return -1;
+    //     } else if (a.priority < b.priority) {
+    //       return 1;
+    //     }
+
+    //     // 3. 총점과 우선순위가 모두 같으면 먼저 등록한 항목이 앞에 온다.
+    //     if (a.createdAt < b.createdAt) {
+    //       return -1;
+    //     } else if (a.createdAt > b.createdAt) {
+    //       return 1;
+    //     }
+
+    //     // 4. 완전히 같으면 순서를 바꾸지 않는다.
+    //     return 0;
+    //   });
 }
 
 function loadTodos() {}
 
-function renderTodos() {}
+function renderTodos(webTodoList) {
+    // 할일 목록(todoList 배열)을 화면에 출력하는 함수
+    const todoListTag = $("#todoList"); // 할 일 목록을 출력할 ul태그
+    todoListTag.empty(); // todoListTag 안의 모든 자식태그를 지운다.
+
+    if (todoList.length === 0) {
+        $("#emptyMessage").show();
+        return;
+    } else {
+        $("#emptyMessage").hide();
+    }
+
+    // 실제 할 일을 출력하는 부분
+    todoList.forEach(function (todo) {
+        const total = todo.priority + todo.importance;
+        // 3항연산자
+        // 조건식 ? 조건식이 참일 때 : 조건식이 거짓일 때
+        const textClass = todo.completed ? "completed-text" : "";
+
+        // 할 일의 완료/미완료 여부에 따라 badge의 색과 문자열을 다르게
+        const statusBadge = todo.completed
+            ? '<span class="badge bg-success">완료</span>'
+            : '<span class="badge bg-secondary">미완료</span>';
+
+        // 할 일의 완료/미완료 여부에 따라 버튼의 색과 문자열을 다르게
+        const toggleBtnText = todo.completed ? "미완료로 변경" : "완료";
+        const toggleBtnClass = todo.completed
+            ? "btn-warning"
+            : "btn-outline-success";
+
+        const html = `
+      <li class="list-group-item todo-item d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1 me-3">
+          <div class="fw-bold ${textClass}">${todo.text}</div>
+          <div class="badge-box mt-2">
+            <span class="badge bg-primary">우선순위: ${todo.priority}</span>
+            <span class="badge bg-danger">중요도: ${todo.importance}</span>
+            <span class="badge bg-dark">총점: ${total}</span>
+            ${statusBadge}
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm ${toggleBtnClass} toggle-btn" data-id="${todo.id}">
+            ${toggleBtnText}
+          </button>
+          <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${todo.id}">
+            삭제
+          </button>
+        </div>
+      </li>
+    `;
+        todoListTag.append(html); // 할 일을 출력
+    });
+}
