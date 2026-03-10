@@ -44,15 +44,33 @@ $(document).ready(function () {
         const id = Number($(this).data("id"));
         toggleTodo(id);
     });
+
+    // 할 일 삭제
+    $(document).on("click", ".delete-btn", function () {
+        const id = Number($(this).data("id"));
+        deleteTodo(id);
+    });
 });
 
 function toggleTodo(id) {
-    // 완료 -> 미완료, 미완료 -> 완료
+    // 완료 -> 미완료, 미완료 -> 완료로 수정 하는 함수
     todoList = todoList.map(function (todo) {
+        // id : 수정하려고 누른 할일의 id
+        // todo.id 기존 배열에 저장되어 있는 할일 id
         if (todo.id === id) {
-            todo.completed = !todo.completed;
+            // 수정하려는 할일 id를 찾았다면
+            todo.completed = !todo.completed; // 완료 -> 미완료, 미완료 -> 완료로 수정
         }
         return todo;
+    });
+    saveTodos();
+    renderTodos();
+}
+
+function deleteTodo(id) {
+    // 할 일을 삭제하는 함수
+    todoList = todoList.filter(function (todo) {
+        return todo.id !== id;
     });
 
     saveTodos();
