@@ -80,6 +80,7 @@ function addTodo() {
     $("#importanceRange").val(3);
     $("#priorityValue").text(3);
     $("#importanceValue").text(3);
+    $("#todoText").focus();
 }
 
 function saveTodos() {
