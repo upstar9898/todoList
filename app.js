@@ -37,7 +37,27 @@ $(document).ready(function () {
             addTodo();
         }
     });
+
+    // 완료/미완료 토글 버튼 (수정 버튼 클릭시)
+    // on은 여러 이벤트를 한꺼번에 걸 때는 필수적으로 사용해야 함
+    $(document).on("click", ".toggle-btn", function () {
+        const id = Number($(this).data("id"));
+        toggleTodo(id);
+    });
 });
+
+function toggleTodo(id) {
+    // 완료 -> 미완료, 미완료 -> 완료
+    todoList = todoList.map(function (todo) {
+        if (todo.id === id) {
+            todo.completed = !todo.completed;
+        }
+        return todo;
+    });
+
+    saveTodos();
+    renderTodos();
+}
 
 // 할 일 추가
 function addTodo() {
@@ -137,7 +157,7 @@ function loadTodos() {
     // localStorage에 저장했던 할 일 목록(json문자열)을 로딩해와 객체배열로 변환해야 함.
     const savedTodos = localStorage.getItem(STORAGE_KEY);
 
-    if (saveTodos) {
+    if (savedTodos) {
         todoList = JSON.parse(savedTodos); // 객체배열로 변환
         sortTodos();
     }
