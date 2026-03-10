@@ -132,7 +132,15 @@ function sortTodos() {
     //   });
 }
 
-function loadTodos() {}
+function loadTodos() {
+    // localStorage에 저장했던 할 일 목록(json문자열)을 로딩해와 객체배열로 변환해야 함.
+    const savedTodos = localStorage.getItem(STORAGE_KEY);
+
+    if (saveTodos) {
+        todoList = JSON.parse(savedTodos); // 객체배열로 변환
+        sortTodos();
+    }
+}
 
 function renderTodos(webTodoList) {
     // 할일 목록(todoList 배열)을 화면에 출력하는 함수
