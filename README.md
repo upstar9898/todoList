@@ -97,7 +97,7 @@ Bootstrap은 **CSS 프레임워크**이다.
 
 ---
 
-## favicon
+## favicon (즐겨찾기 아이콘)
 
 ```html
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
