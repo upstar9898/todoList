@@ -1,6 +1,3 @@
-아래는 업로드하신 **HTML / CSS / JavaScript 소스를 기반으로 만든 `README.md` 예시**입니다.
-**초보자가 코드만 보고도 자습할 수 있도록 문법 설명을 매우 촘촘하게 포함**했습니다.
-
 ---
 
 # 📌 TodoList 프로젝트 (jQuery + LocalStorage)
